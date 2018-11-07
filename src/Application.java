@@ -7,16 +7,16 @@ import javax.swing.Box;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
-import javax.swing.JComponent;
+import javax.swing.JComponent;//
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-public class PizzaGridBagLayout extends JFrame {
+public class Application extends JFrame {
     public static void main(String[] args) {
-        new PizzaGridBagLayout();
+        new Application();
     }
 
     JTextField name = new JTextField(20), phone = new JTextField(10), address = new JTextField(20);
@@ -30,7 +30,7 @@ public class PizzaGridBagLayout extends JFrame {
 
     JButton okButton = new JButton("OK"), closeButton = new JButton("Close");
 
-    public PizzaGridBagLayout() {
+    public Application() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JPanel panel1 = new JPanel();
