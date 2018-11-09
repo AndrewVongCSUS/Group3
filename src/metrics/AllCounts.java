@@ -1,4 +1,4 @@
-package com.metrics;
+package metrics;
 
 // -----------------------------------------------------------------------------
 // Stores all of the counts for a file.

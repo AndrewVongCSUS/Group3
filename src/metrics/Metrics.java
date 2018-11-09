@@ -4,9 +4,9 @@
  * Individual Project
  */
 
-package com.metrics;
+package metrics;
 
-import com.IMetrics;
+//import IMetrics;//Same package, don't import
 
 import java.io.*;
 

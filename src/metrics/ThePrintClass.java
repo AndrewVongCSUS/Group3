@@ -1,4 +1,4 @@
-package com.metrics;
+package metrics;
 
 import java.text.DecimalFormat;
 
