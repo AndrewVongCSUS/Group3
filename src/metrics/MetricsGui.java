@@ -1,9 +1,10 @@
+//Just a Test GUI
+
 package metrics;
 
-import java.awt.*;
-import java.awt.event.*;
 import java.io.*;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.*;
 /**
  *
@@ -12,21 +13,21 @@ import javax.swing.*;
 public class MetricsGui extends javax.swing.JDialog {
     
     //Written by Aterai, https://stackoverflow.com/questions/32889429/adding-a-console-output-to-swing-gui-that-can-support-special-characters 
-    class TextAreaOutputStream extends OutputStream {
-        private final ByteArrayOutputStream buf = new ByteArrayOutputStream();
-        private final JTextArea consoleOutput;
-        public TextAreaOutputStream(JTextArea consoleOutput) {
-          super();
-          this.consoleOutput = consoleOutput;
+    public class CustomOutputStream extends OutputStream {
+        private JTextArea textArea;
+
+        public CustomOutputStream(JTextArea textArea) {
+            this.textArea = textArea;
         }
-        @Override public void flush() throws IOException {
-          consoleOutput.append(buf.toString("UTF-8"));
-          buf.reset();
+
+        @Override
+        public void write(int b) throws IOException {
+            // redirects data to the text area
+            textArea.append(String.valueOf((char)b));
+            // scrolls the text area to the end of data
+            textArea.setCaretPosition(textArea.getDocument().getLength());
         }
-        @Override public void write(int b) throws IOException {
-          buf.write(b);
-        }
-      }
+    }
 
     /**
      * Creates new form MetricsStarter
@@ -44,30 +45,40 @@ public class MetricsGui extends javax.swing.JDialog {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        jButtonRunLocal = new javax.swing.JButton();
+        jButtonRunGit = new javax.swing.JButton();
+        jButtonPaste = new javax.swing.JButton();
+        jURLField = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        consoleOutput = new javax.swing.JTextPane();
+        textPaneConsoleOutput = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setText("Metrics");
 
-        jButton1.setText("Run In Local");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButtonRunLocal.setText("Run In Local");
+        jButtonRunLocal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButtonRunLocalActionPerformed(evt);
             }
         });
 
-        consoleOutput.setEditable(false);
+        jButtonRunGit.setText("Run on Git");
 
-        org.jdesktop.beansbinding.Binding binding = org.jdesktop.beansbinding.Bindings.createAutoBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, consoleOutput, org.jdesktop.beansbinding.ObjectProperty.create(), consoleOutput, org.jdesktop.beansbinding.BeanProperty.create("text"));
-        bindingGroup.addBinding(binding);
+        jButtonPaste.setText("Paste");
+        jButtonPaste.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPasteActionPerformed(evt);
+            }
+        });
 
-        jScrollPane1.setViewportView(consoleOutput);
+        jURLField.setText("Enter Git Repository URL");
+
+        textPaneConsoleOutput.setColumns(20);
+        textPaneConsoleOutput.setRows(5);
+        jScrollPane1.setViewportView(textPaneConsoleOutput);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -75,34 +86,67 @@ public class MetricsGui extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jScrollPane1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jURLField)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButtonPaste))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 259, Short.MAX_VALUE)
+                                .addComponent(jLabel1)
+                                .addGap(183, 183, 183)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButtonRunGit)
+                            .addComponent(jButtonRunLocal))))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel1)
-                        .addComponent(jButton1))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(24, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jButtonRunLocal))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonRunGit)
+                    .addComponent(jButtonPaste)
+                    .addComponent(jURLField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
+                .addContainerGap())
         );
-
-        bindingGroup.bind();
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        MetricsApp App = new MetricsApp();
+    private void jButtonRunLocalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRunLocalActionPerformed
+        PrintStream printStream = new PrintStream(new CustomOutputStream(textPaneConsoleOutput));
+        System.setOut(printStream);
+        System.setErr(printStream);
+
+        System.setOut(printStream);
+        System.setErr(printStream);
+
+
+        System.out.println("Starting Metrics...");
+        String[] args = {""};
+        List<IMetrics> listOfIMetrics = new ArrayList<>();
+        MetricsRun mRun = new MetricsRun();
+         System.out.println("Running...");
+        //listOfIMetrics.addAll(mRun.run(args, true));
+        //TODO print the rest
+
         
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_jButtonRunLocalActionPerformed
+
+    private void jButtonPasteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPasteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonPasteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -148,10 +192,12 @@ public class MetricsGui extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextPane consoleOutput;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButtonPaste;
+    private javax.swing.JButton jButtonRunGit;
+    private javax.swing.JButton jButtonRunLocal;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
+    private javax.swing.JTextField jURLField;
+    private javax.swing.JTextArea textPaneConsoleOutput;
     // End of variables declaration//GEN-END:variables
 }
